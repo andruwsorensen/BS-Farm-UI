@@ -1,0 +1,1 @@
+https://medium.com/better-programming/how-to-train-yolov5-for-recognizing-custom-game-objects-in-real-time-9d78369928a8
