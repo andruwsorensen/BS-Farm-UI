@@ -1,1 +1,6 @@
 https://medium.com/better-programming/how-to-train-yolov5-for-recognizing-custom-game-objects-in-real-time-9d78369928a8
+https://www.youtube.com/watch?v=KecMlLUuiE4&list=PL1m2M8LQlzfKtkKq2lK5xko4X-8EZzFPI
+https://github.com/Jooi025/BrawlStarsBot
+https://github.com/ivanyordanovgt/brawl-stars-bot
+https://github.com/PylaAI/PylaAI
+https://github.com/AngelFireLA/BrawlStarsBotMaking
