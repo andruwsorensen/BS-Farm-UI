@@ -112,14 +112,17 @@ class BSBot(QObject):
                             if other_icons:
                                 self.idle_time = last_scan_time
                                 self.ui_loop(other_icons)
-                            elif last_scan_time - self.idle_time > int(self.global_states["idle_timeout"]):
+                            elif last_scan_time - self.idle_time > self.global_states["idle_timeout"]:
                                 self.message.emit("No elements found, performing idle clicks...")
                                 x, y = self.ui_locations["idle_click_1"]["coords"]
                                 pyautogui.click(x, y)
                                 time.sleep(3)
                                 x, y = self.ui_locations["idle_click_2"]["coords"]
                                 pyautogui.click(x, y)
-                                last_scan_time = time.time()  # Reset last scan time after idle clicks
+                                self.idle_time = last_scan_time  # Reset last scan time after idle clicks
+                            else:
+                                self.message.emit("No elements found, trying pressing...")
+                                self.trigger_action("attack_button")
                         except Exception as ui_error:
                             self.message.emit(f"UI scan error: {str(ui_error)}")
                             time.sleep(0.05)  # Brief pause on scan error
@@ -252,7 +255,7 @@ class BSBot(QObject):
                     else:
                         pyautogui.press("t")
                         time.sleep(1.5)
-        elif "proceed_button" in found_icons or "exit_button" in found_icons:
+        elif "proceed_button" in found_icons or "exit_button" in found_icons or "im_ready_button" in found_icons:
             self.message.emit("Proceed button found, clicking...")
             self.trigger_action("proceed_button")
         elif "red_x" in found_icons:
@@ -281,7 +284,8 @@ class BSBot(QObject):
             if self.global_states["use_keyboard"]:
                 pyautogui.press(action["key"])
             else: 
-                pyautogui.click(action["coords"])
+                x, y = action["coords"]
+                pyautogui.click(x, y)
 
     def handle_movement(self, player_pos, target_pos, aggressive=False, avoid=False):
         """Handle movement based on relative positions with optional aggressive mode and avoid (move any way but toward target)."""
@@ -328,7 +332,6 @@ class BSBot(QObject):
                     pyautogui.moveTo(move_x, move_y, duration=0.05)
                     print(f"Avoiding enemy: move to ({move_x},{move_y}) at angle {angle:.2f}")
                     return False
-                    
                 # Calculate direction vector from joystick base to target
                 dx = float(tx - px)
                 dy = float(ty - py)

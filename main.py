@@ -112,6 +112,7 @@ class BS_Farm(QWidget):
         "retry_login": "img/retry_login.png",
         "play_button": "img/play_button.png",
         "proceed_button": "img/proceed_button.png",
+        "im_ready_button": "img/im_ready_button.png",
         "exit_button": "img/exit_button.png",
         "current_game_mode": "img/current_game_mode.png",
         # "next_game_mode": "img/next_game_mode.png",
@@ -252,7 +253,7 @@ class BS_Farm(QWidget):
                 dropdown.addItem("False")
                 dropdown.setCurrentIndex(0 if value else 1)
                 dropdown.currentTextChanged.connect(
-                    lambda text, k=key: self.global_states.update({k: text == bool("True")})
+                    lambda text, k=key: self.global_states.update({k: text == "True"})
                 )
                 dropdown.currentTextChanged.connect(
                     lambda text, k=key: self.console_output.appendPlainText(f"{k} updated to {text}")
@@ -260,23 +261,10 @@ class BS_Farm(QWidget):
                 row_layout.addWidget(dropdown)
             else:
                 line_edit = QLineEdit(str(value))
-                # Create a validator that only accepts integers
-                def validate_input(text):
-                    if text == "":
-                        return str(self.global_states[key])
-                    try:
-                        new_value = int(text)
-                        self.global_states[key] = new_value
-                        self.console_output.appendPlainText(f"{key} updated to {new_value}")
-                        return text
-                    except ValueError:
-                        self.console_output.appendPlainText(f"Invalid input for {key}, must be a number")
-                        return str(self.global_states[key])
-                
-                line_edit.textChanged.connect(lambda text: line_edit.setText(validate_input(text)))
+                line_edit.textChanged.connect(
+                    lambda text, k=key: self.update_numeric_value(text, k)
+                )
                 row_layout.addWidget(line_edit)
-                row_layout.addWidget(line_edit)
-            
             tab2_layout.addLayout(row_layout)
 
         # Tab 3 Layout
@@ -302,7 +290,7 @@ class BS_Farm(QWidget):
         # Tab 4 Layout
         self.tab4.setLayout(QVBoxLayout())
 
-        for key in ["player", "enemy", "enemy2", "team", "connection_lost", "red_x", "retry_login", "play_button", "proceed_button", "exit_button", "current_game_mode", "next_game_mode", "next_brawler"]:
+        for key in ["player", "enemy", "enemy2", "team", "connection_lost", "red_x", "retry_login", "play_button", "proceed_button", "im_ready_button", "exit_button", "current_game_mode", "next_game_mode", "next_brawler"]:
             layout = QHBoxLayout()
             label = QLabel(f"{key}:")
             layout.addWidget(label)
@@ -320,7 +308,14 @@ class BS_Farm(QWidget):
 
         self.setLayout(main_layout)
     
-        
+    def update_numeric_value(self, text, key):
+        try:
+            if text:  # Only try to convert if there's text
+                value = int(text)
+                self.global_states[key] = value
+                self.console_output.appendPlainText(f"{key} updated to {value}")
+        except ValueError:
+            self.console_output.appendPlainText(f"Invalid input for {key}, must be a number")
 
     def start_key_capture(self, key_label, ui_element):
         """Start capturing the next keypress for hotkey assignment"""
