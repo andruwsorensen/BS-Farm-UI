@@ -1,0 +1,126 @@
+{
+    "global_states": {
+        "attack_cooldown": 0.5,
+        "attack_range": 400,
+        "super_range": 600,
+        "attack_always": false,
+        "movement_keys": {
+            "w": false,
+            "a": false,
+            "s": false,
+            "d": false
+        },
+        "joystick_x": "242",
+        "joystick_y": "483",
+        "joystick_radius": "70",
+        "avoid_range": 250,
+        "run_away_range": 150,
+        "approach_range": 500,
+        "screenshot_region": [
+            {
+                "left": 68,
+                "top": 35,
+                "width": 1048,
+                "height": 648
+            }
+        ],
+        "use_keyboard": true,
+        "use_mouse_movement": true,
+        "extra_scan_interval": 30,
+        "idle_timeout": 60,
+        "idle_click_1": [
+            100,
+            200
+        ],
+        "idle_click_2": [
+            300,
+            400
+        ]
+    },
+    "ui_locations": {
+        "proceed_button": {
+            "coords": [
+                927,
+                594
+            ],
+            "key": "p"
+        },
+        "game_mode": {
+            "coords": [
+                1071,
+                350
+            ],
+            "key": "g"
+        },
+        "retry_login": {
+            "coords": [
+                357,
+                391
+            ],
+            "key": "r"
+        },
+        "brawler_select": {
+            "coords": [
+                1094,
+                478
+            ],
+            "key": "b"
+        },
+        "more_settings": {
+            "coords": [
+                242,
+                414
+            ],
+            "key": "m"
+        },
+        "switch_user": {
+            "coords": [
+                242,
+                483
+            ],
+            "key": "s"
+        },
+        "attack_button": {
+            "coords": [
+                1072,
+                567
+            ],
+            "key": "space"
+        },
+        "super_button": {
+            "coords": [
+                983,
+                599
+            ],
+            "key": "e"
+        },
+        "gadget_button": {
+            "coords": [
+                1037,
+                654
+            ],
+            "key": "f"
+        },
+        "hypercharge_button": {
+            "coords": [
+                931,
+                654
+            ],
+            "key": "q"
+        },
+        "idle_click_1": {
+            "coords": [
+                425,
+                19
+            ],
+            "key": "i"
+        },
+        "idle_click_2": {
+            "coords": [
+                983,
+                366
+            ],
+            "key": "o"
+        }
+    }
+}
