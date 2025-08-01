@@ -13,21 +13,21 @@
         "joystick_x": "242",
         "joystick_y": "483",
         "joystick_radius": "70",
-        "avoid_range": 250,
+        "avoid_range": "350",
         "run_away_range": 150,
         "approach_range": 500,
         "screenshot_region": [
             {
-                "left": 68,
-                "top": 35,
-                "width": 1048,
-                "height": 648
+                "left": 65,
+                "top": 44,
+                "width": 1038,
+                "height": 639
             }
         ],
         "use_keyboard": true,
         "use_mouse_movement": true,
         "extra_scan_interval": 30,
-        "idle_timeout": 60,
+        "idle_timeout": "60",
         "idle_click_1": [
             100,
             200
@@ -61,8 +61,8 @@
         },
         "brawler_select": {
             "coords": [
-                1094,
-                478
+                959,
+                228
             ],
             "key": "b"
         },
@@ -110,14 +110,14 @@
         },
         "idle_click_1": {
             "coords": [
-                425,
-                19
+                423,
+                23
             ],
             "key": "i"
         },
         "idle_click_2": {
             "coords": [
-                983,
+                980,
                 366
             ],
             "key": "o"

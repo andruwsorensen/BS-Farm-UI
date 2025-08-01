@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, QRect, QPoint, pyqtSignal, QThread, QTimer
 from PyQt6.QtGui import QPainter, QPen, QColor, QFont
 from qt_material import apply_stylesheet
+from PyQt6.QtCore import Qt
 from bs_bot import BSBot
 from pynput import keyboard
 import json
@@ -112,6 +113,7 @@ class BS_Farm(QWidget):
         "play_button": "img/play_button.png",
         "proceed_button": "img/proceed_button.png",
         "exit_button": "img/exit_button.png",
+        "current_game_mode": "img/current_game_mode.png",
         # "next_game_mode": "img/next_game_mode.png",
         # "next_brawler": "img/next_brawler.png",
     }
@@ -265,7 +267,7 @@ class BS_Farm(QWidget):
         # Tab 4 Layout
         self.tab4.setLayout(QVBoxLayout())
 
-        for key in ["player", "enemy", "enemy2", "team", "connection_lost", "red_x", "retry_login", "play_button", "proceed_button", "exit_button", "next_game_mode", "next_brawler"]:
+        for key in ["player", "enemy", "enemy2", "team", "connection_lost", "red_x", "retry_login", "play_button", "proceed_button", "exit_button", "current_game_mode", "next_game_mode", "next_brawler"]:
             layout = QHBoxLayout()
             label = QLabel(f"{key}:")
             layout.addWidget(label)
@@ -348,6 +350,7 @@ class BS_Farm(QWidget):
         self.console_output.appendPlainText("Starting the bot")
         self.start_bot_button.setEnabled(False)
         self.thread = QThread()
+        self.thread.setPriority(QThread.Priority.HighestPriority)  # Set thread to highest priority
         self.bot = BSBot(self.ui_locations, self.global_states, self.bot_template_paths, self.ui_template_paths)
         self.bot.moveToThread(self.thread)
         self.thread.started.connect(self.bot.check_state)
