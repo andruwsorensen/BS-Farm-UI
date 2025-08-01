@@ -1,7 +1,7 @@
 {
     "global_states": {
         "attack_cooldown": 0.5,
-        "attack_range": 400,
+        "attack_range": 450.0,
         "super_range": 600,
         "attack_always": false,
         "movement_keys": {
@@ -10,10 +10,10 @@
             "s": false,
             "d": false
         },
-        "joystick_x": "242",
-        "joystick_y": "483",
-        "joystick_radius": "70",
-        "avoid_range": "350",
+        "joystick_x": 242,
+        "joystick_y": 483,
+        "joystick_radius": 70,
+        "avoid_range": 350,
         "run_away_range": 150,
         "approach_range": 500,
         "screenshot_region": [
@@ -24,10 +24,10 @@
                 "height": 639
             }
         ],
-        "use_keyboard": true,
+        "use_keyboard": false,
         "use_mouse_movement": true,
         "extra_scan_interval": 30,
-        "idle_timeout": "60",
+        "idle_timeout": 4,
         "idle_click_1": [
             100,
             200
@@ -78,7 +78,7 @@
                 242,
                 483
             ],
-            "key": "s"
+            "key": "u"
         },
         "attack_button": {
             "coords": [

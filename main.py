@@ -3,13 +3,13 @@ from PyQt6.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QLabel, QPushButton, QTabWidget, QHBoxLayout, QPlainTextEdit, QLineEdit, QComboBox
 )
 from PyQt6.QtCore import Qt, QRect, QPoint, pyqtSignal, QThread, QTimer
-from PyQt6.QtGui import QPainter, QPen, QColor, QFont
+from PyQt6.QtGui import QPainter, QPen, QColor, QFont, QIcon
 from qt_material import apply_stylesheet
-from PyQt6.QtCore import Qt
 from bs_bot import BSBot
 from pynput import keyboard
 import json
 import os
+import platform
 
 
 
@@ -120,7 +120,13 @@ class BS_Farm(QWidget):
         
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("BS-Farm")
+        self.setWindowTitle("AutoStarr")
+        if platform.system() == "Windows":
+            # if windows do ico, if not png
+            self.setWindowIcon(QIcon("img/icon.ico"))
+        else:
+            # For non-Windows systems, use PNG icon
+            self.setWindowIcon(QIcon("img/icon.png")) 
         self.setGeometry(200, 200, 800, 600)
         self.selected_region_temp = {}
 
@@ -158,7 +164,7 @@ class BS_Farm(QWidget):
             "retry_login": {"coords": (1100, 600), "key": "r"},
             "brawler_select": {"coords": (1100, 600), "key": "b"},
             "more_settings": {"coords": (1100, 600), "key": "m"},
-            "switch_user": {"coords": (1100, 600), "key": "s"},
+            "switch_user": {"coords": (1100, 600), "key": "u"},
 
             # Game UI Elements
             "attack_button": {"coords": (1100, 600), "key": "space"},      
@@ -196,8 +202,28 @@ class BS_Farm(QWidget):
         self.tabs.addTab(self.tab3, "UI Locations")
         self.tabs.addTab(self.tab4, "Screenshots")
 
+        self.load_settings()  # Load settings before setting up the UI
+
         # Tab 1 Layout
         tab1_layout = QVBoxLayout()
+        for key, value in self.ui_locations.items():
+            row_layout = QHBoxLayout()
+            # Element name
+            row_layout.addWidget(QLabel(f"{key}:"))
+            
+            # Current hotkey display
+            hotkey_label = QLabel(f"Current hotkey: {value.get('key', 'None')}")
+            row_layout.addWidget(hotkey_label)
+
+            # Button to change hotkey
+            change_hotkey_btn = QPushButton("Change Hotkey")
+            change_hotkey_btn.clicked.connect(
+                lambda checked, k=key, lbl=hotkey_label: self.start_key_capture(lbl, k)
+            )
+            row_layout.addWidget(change_hotkey_btn)
+            
+            tab1_layout.addLayout(row_layout)
+
         self.screenshot_label = QLabel(f"Current Screenshot Region: {self.global_states['screenshot_region']}")
         self.screenshot_region_button = QPushButton("Select Region")
         self.screenshot_region_button.clicked.connect(self.capture_screenshot_region)
@@ -226,7 +252,7 @@ class BS_Farm(QWidget):
                 dropdown.addItem("False")
                 dropdown.setCurrentIndex(0 if value else 1)
                 dropdown.currentTextChanged.connect(
-                    lambda text, k=key: self.global_states.update({k: text == "True"})
+                    lambda text, k=key: self.global_states.update({k: text == bool("True")})
                 )
                 dropdown.currentTextChanged.connect(
                     lambda text, k=key: self.console_output.appendPlainText(f"{k} updated to {text}")
@@ -234,12 +260,21 @@ class BS_Farm(QWidget):
                 row_layout.addWidget(dropdown)
             else:
                 line_edit = QLineEdit(str(value))
-                line_edit.textChanged.connect(
-                    lambda text, k=key: self.global_states.update({k: text})
-                )
-                line_edit.textChanged.connect(
-                    lambda text, k=key: self.console_output.appendPlainText(f"{k} updated to {text}")
-                )
+                # Create a validator that only accepts integers
+                def validate_input(text):
+                    if text == "":
+                        return str(self.global_states[key])
+                    try:
+                        new_value = int(text)
+                        self.global_states[key] = new_value
+                        self.console_output.appendPlainText(f"{key} updated to {new_value}")
+                        return text
+                    except ValueError:
+                        self.console_output.appendPlainText(f"Invalid input for {key}, must be a number")
+                        return str(self.global_states[key])
+                
+                line_edit.textChanged.connect(lambda text: line_edit.setText(validate_input(text)))
+                row_layout.addWidget(line_edit)
                 row_layout.addWidget(line_edit)
             
             tab2_layout.addLayout(row_layout)
@@ -284,9 +319,44 @@ class BS_Farm(QWidget):
         main_layout.addLayout(console_layout, stretch=2)
 
         self.setLayout(main_layout)
+    
         
-        # Load settings after UI is fully initialized
-        self.load_settings()
+
+    def start_key_capture(self, key_label, ui_element):
+        """Start capturing the next keypress for hotkey assignment"""
+        # Disable the button while capturing
+        sender = self.sender()
+        sender.setEnabled(False)
+        sender.setText("Press any key...")
+        
+        def on_key_press(key):
+            try:
+                # Convert the key to a string representation
+                if hasattr(key, 'char'):
+                    key_str = key.char
+                else:
+                    key_str = str(key).replace('Key.', '')
+                
+                # Update the UI element's hotkey
+                self.ui_locations[ui_element]["key"] = key_str
+                # Update the label
+                key_label.setText(f"Current hotkey: {key_str}")
+                # Re-enable the button
+                sender.setEnabled(True)
+                sender.setText("Change Hotkey")
+                # Log the change
+                self.console_output.appendPlainText(f"Updated hotkey for {ui_element} to {key_str}")
+                # Stop listening
+                return False
+            except Exception as e:
+                self.console_output.appendPlainText(f"Error setting hotkey: {str(e)}")
+                sender.setEnabled(True)
+                sender.setText("Change Hotkey")
+                return False
+
+        # Start listening for a keypress
+        listener = keyboard.Listener(on_press=on_key_press)
+        listener.start()
 
     def capture_screenshot_region(self, is_screenshot=False, is_point=False, target_key=None, label_to_update=None):
         self.hide()
