@@ -1,8 +1,8 @@
 {
     "global_states": {
         "attack_cooldown": 0.5,
-        "attack_range": 450,
-        "super_range": 600,
+        "attack_range": 400,
+        "super_range": 400,
         "attack_always": false,
         "movement_keys": {
             "w": false,
@@ -18,10 +18,10 @@
         "approach_range": 500,
         "screenshot_region": [
             {
-                "left": 65,
-                "top": 44,
-                "width": 1038,
-                "height": 639
+                "left": 50,
+                "top": 37,
+                "width": 912,
+                "height": 571
             }
         ],
         "use_keyboard": true,
@@ -41,7 +41,7 @@
     "ui_locations": {
         "proceed_button": {
             "coords": [
-                927,
+                946,
                 594
             ],
             "key": "p"
@@ -111,15 +111,15 @@
         },
         "idle_click_1": {
             "coords": [
-                423,
-                23
+                422,
+                19
             ],
             "key": "i"
         },
         "idle_click_2": {
             "coords": [
-                980,
-                366
+                875,
+                335
             ],
             "key": "o"
         }

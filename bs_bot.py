@@ -14,7 +14,7 @@ class BSBot(QObject):
 
     def __init__(self, ui_locations, global_states, BOT_TEMPLATE_PATHS, UI_TEMPLATE_PATHS):
         super().__init__()
-        self.bot_scanner = FastTemplateScanner(BOT_TEMPLATE_PATHS, confidence_threshold=0.75)
+        self.bot_scanner = FastTemplateScanner(BOT_TEMPLATE_PATHS, confidence_threshold=0.80)
         self.ui_locations = ui_locations
         self.ui_scanner = FastTemplateScanner(UI_TEMPLATE_PATHS, confidence_threshold=0.85)
         self.global_states = global_states
@@ -199,8 +199,7 @@ class BSBot(QObject):
                 else:
                     self.execute_attack_sequence(distance)
             elif "player" in found_icons and "team" in found_icons:
-                if self.change_state("following"):
-                    self.message.emit("Now following team member")
+                self.message.emit("Now following team member")
 
                 # Get player_pos with highest confidence
                 player_matches = found_icons["player"]

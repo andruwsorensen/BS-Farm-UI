@@ -103,7 +103,7 @@ class BS_Farm(QWidget):
         "player":    "img/player.png",
         "enemy":     "img/enemy.png",
         "enemy2":    "img/enemy2.png",
-        # "team":      "img/team.png"
+        "team":      "img/team.png"
     }
 
     ui_template_paths = {
